@@ -8,7 +8,7 @@ def get_colors(k):
         colors.append(cm(1.*i/k))
     return colors
 
-def gen_scatter_plot(points, ks, centroids, fname):
+def gen_scatter_plot(points, ks, centroids, fname = None):
     pylab.close()
     lcm = ListedColormap(get_colors(len(centroids)))
     pylab.scatter(points[:,0], points[:,1], c=ks, cmap=lcm)

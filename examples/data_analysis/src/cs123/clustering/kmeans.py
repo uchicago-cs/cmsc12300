@@ -4,7 +4,7 @@
 import sys
 import random
 import numpy
-from common.utils import distance
+from cs123.common.utils import distance
 
 class KMeans(object):
     
