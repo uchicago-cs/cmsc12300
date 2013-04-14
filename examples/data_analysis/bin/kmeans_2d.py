@@ -5,15 +5,15 @@
 
 """Uses k-means clustering to classify points into K clusters
 
-Where DATAFILE is a file with the points. Each line has
+The input file must be a text file where each line has
 an entry like this:
 
      X Y
 
-If no CLUSTERFILE parameters is specified, the clustering
+If no output file is specified, the clustering
 will be visualized using a scatterplot after each iteration. 
 
-If CLUSTERFILE is specified, the points are saved to a file 
+If an output file is specified, the points are saved to a file 
 where each line contains the following:
 
      X Y C

@@ -2,31 +2,60 @@
 #
 # CMSC 12300 - Computer Science with Applications 3
 # Borja Sotomayor, 2013
-#
-# Connect to the Twitter public stream and use a
-# lossy counter to keep track of the most popular
-# hashtags (where "most popular" is "appears at least some
-# percent of the time"). The percentage is specified
-# as a command-line parameter.
-# 
-# For this to work, you need to create a ".tpass" file
-# with your Twitter username and password, separated
-# by a single space.
-# 
-# See the documentation in the lossycount.py module
-# for more details on how lossy counting works.
 
-import sys
+"""Find the most frequent hashtags in the Twitter
+public stream.
+
+Connects to the Twitter public stream and uses a
+lossy counter to keep track of the most popular
+hashtags (where "most popular" is "appears at least some
+percent of the time"). The percentage is specified
+as a command-line parameter.
+ 
+For this to work, you need to create a file
+with your Twitter username and password, separated
+by a single space (by default, the program will
+look for a ".tpass" file, but a different path
+can be specified with the "-c" option)
+ 
+See the documentation in the cs123.topk.lossycount module
+for more details on how lossy counting works.
+"""
+
+import argparse
 import tweetstream
 import re
-from lossycount import LossyCounter
+from cs123.topk.lossycount import LossyCounter
 
-s = float(sys.argv[1])
+def parse_command_line_arguments():
+    """Parses the arguments provided through the
+    command line. Run the program with option "-h"
+    to see a human-readable description of the
+    arguments"""
 
-username,password = open(".tpass").read().strip().split()
+    description, epilog = __doc__.split("\n\n", 1)
+
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=description,
+        epilog=epilog)
+
+    parser.add_argument('-s', '--s', dest='s', action='store', type=float, required=True,
+                       help='Minimum frequency')
+    parser.add_argument('-c', '--credentials', dest='credentials', action='store',
+                        default="./.tpass",
+                        help='File with Twitter credentials (username and password, separated by a space)')
+
+    args = parser.parse_args()
+    
+    return args
+
+args = parse_command_line_arguments()
+
+username,password = open(args.credentials).read().strip().split()
 
 stream = tweetstream.SampleStream(username,password)
-lc = LossyCounter(s)
+lc = LossyCounter(args.s)
 
 N=0
 while True:

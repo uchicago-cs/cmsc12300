@@ -2,82 +2,60 @@
 
 # CMSC 12300 - Computer Science with Applications 3
 # Borja Sotomayor, 2013
-#
-# Finds the maximum value in a text file of integers by
-# dividing the file into several chunks, and spawning
-# a separate process to find the maximum in each chunk.
-#
-# Takes two command-line parameters: the file and the 
-# number of chunks:
-#
-#     python max_multiproc.py numbers.txt 4
-#
 
-import sys
+"""Finds the maximum value in a text file of integers.
+
+This program divides the file into several chunks, and spawns
+a separate process to find the maximum in each chunk.
+"""
+
+import argparse
 import os.path
 from multiprocessing import Pool
 
-# Given a text file with one integer per line,
-# this functions finds the boundaries of the file
-# that divide it into four chunks (taking into account
-# that we don't want to divide the file mid-number;
-# it has to be divided after a newline)
-def find_file_ranges(f, chunks):
-    f.seek(0,2)
-    fsize = f.tell()
+from cs123.topk.max import find_file_ranges, find_max_in_range
 
-    ranges = []
-    chunk_size = fsize / chunks
-    start = 0
-    for i in range(chunks):
-        f.seek(start + chunk_size)
-        l = f.readline()
-        end = min(start + chunk_size + len(l) - 1, fsize)
-        ranges.append( (start, end) )
-        start = end + 1
+def find_max_in_range_wrapper(args):
+    """Wrapper around find_max_in_range.
 
-    return ranges
+    The multiprocessing library requires that this
+    function have a single argument, so the args
+    argument is actually a tuple:
 
-# Given a range of bytes in the file, and assuming
-# that the range includes complete lines (as returned
-# by find_file_ranges), return the maximum number
-# in that range.
-#
-# The multiprocessing library requires that this
-# function have a single argument, so the args
-# argument is actually a tuple:
-#
-#    (fname, (range_start, range_end))
-#
-def find_max_in_range(args):
-    fname = args[0]
-    frange = args[1]
+       (fname, (range_start, range_end))
+    """
+    max_in_range = find_max_in_range(args[0], args[1])
+    print "Chunk %i-%i done. Max: %i" % (args[1][0], args[1][1], max_in_range)
+    return max_in_range 
 
-    f = open(fname)
-    n_max = 0
+def parse_command_line_arguments():
+    """Parses the arguments provided through the
+    command line. Run the program with option "-h"
+    to see a human-readable description of the
+    arguments"""
 
-    f.seek(frange[0])
+    description, epilog = __doc__.split("\n\n", 1)
 
-    for n in f:
-        if int(n) > n_max:
-            n_max = int(n)
-        if f.tell() >= frange[1]:
-            break
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=description,
+        epilog=epilog)
 
-    f.close()
+    parser.add_argument('datafile', metavar='FILE',
+                       help='Text file with one integer per line')
+    parser.add_argument('-n', '--nchunks', dest='nchunks', action='store', type=int, required=True,
+                       help='Number of chunks to divide the file into')
 
-    print "Chunk (%i - %i) done (max=%i)." % (frange[0], frange[1],n_max)
+    args = parser.parse_args()
+    
+    return args
 
-    return n_max
+args = parse_command_line_arguments()
 
+fname = args.datafile
+nchunks = args.nchunks
 
-fname = sys.argv[1]
-nchunks = int(sys.argv[2])
-
-
-f = open(fname)
-
-franges = find_file_ranges(f, nchunks)
+franges = find_file_ranges(fname, nchunks)
 
 print "Dividing the file into %i chunks:" % nchunks
 
@@ -88,10 +66,8 @@ print
 # Multi-processing magic
 p = Pool(nchunks)
 args = zip([fname]*nchunks, franges)
-res = p.map(find_max_in_range, args)
+res = p.map(find_max_in_range_wrapper, args)
 
 print
 print "Maximum: %i" % (max(res))
 
-
-f.close()
