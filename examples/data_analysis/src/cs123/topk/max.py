@@ -32,6 +32,7 @@ def find_file_ranges(fname, chunks):
     - fname: The name of the file
     - chunks: Number of chunks
     """
+    f = open(fname)
 
     f.seek(0,2)
     fsize = f.tell()
@@ -46,6 +47,7 @@ def find_file_ranges(fname, chunks):
         ranges.append( (start, end) )
         start = end + 1
 
+    f.close()
     return ranges
 
 def find_max_in_range(fname, frange):

@@ -1,3 +1,13 @@
+#!/usr/bin/python
+
+# CMSC 12300 - Computer Science with Applications 3
+# Borja Sotomayor, 2013
+#
+# Forked from: https://github.com/sorki/python-mnist
+#              (written by Richard Marko)
+
+"""This module provides functions to manipulate the MNIST dataset"""
+
 import os
 import struct
 import numpy
@@ -61,11 +71,11 @@ class MNISTReader(object):
         self.preload = preload
 
         if preload:
-            self.memimages = [img for img in self.__images_from_file()]
+            self.memimages = [img for img in self.__images_from_file(as_array=False)]
         else:
             self.memimages = None
 
-    def __images_from_file(self):
+    def __images_from_file(self, as_array):
         i = 0
         
         imgf = open(self.img_fname, 'rb')
@@ -77,20 +87,27 @@ class MNISTReader(object):
         while i < self.num:
             i+=1
             imgdata, label = self.__read_single_image(imgf, lblf)
-            yield MNISTImage(imgdata, label, self.rows, self.cols)
+            img = MNISTImage(imgdata, label, self.rows, self.cols)
+            if as_array:
+                yield img.as_array(), img.label
+            else:
+                yield img
 
         imgf.close()
         lblf.close()
 
-    def __images_from_mem(self):
+    def __images_from_mem(self, as_array):
         for img in self.memimages:
-            yield img
+            if as_array:
+                yield img.as_array(), img.label
+            else:
+                yield img
 
-    def images(self):
+    def images(self, as_array=False):
         if self.preload:
-            return self.__images_from_mem()
+            return self.__images_from_mem(as_array)
         else:
-            return self.__images_from_file()
+            return self.__images_from_file(as_array)
        
 
     def __read_single_image(self, imgf, lblf):
@@ -119,20 +136,3 @@ class MNISTReader(object):
 
             return MNISTImage(imgdata, label, self.rows, self.cols)
 
-    def test(self):
-        test_img, test_label = self.load_testing()
-        train_img, train_label = self.load_training()
-        assert len(test_img) == len(test_label)
-        assert len(test_img) == 10000
-        assert len(train_img) == len(train_label)
-        assert len(train_img) == 60000
-        print 'Showing num:%d' % train_label[0]
-        print self.display(train_img[0])
-        print
-        return True
-
-if __name__ == "__main__":
-    print 'Testing'
-    mn = MNIST('.')
-    if mn.test():
-        print 'Passed'
