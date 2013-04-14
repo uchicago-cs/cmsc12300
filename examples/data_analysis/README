@@ -1,0 +1,73 @@
+CMSC 12300 - Computer Science with Applications 3
+Borja Sotomayor, 2013
+
+DATA ANALYSIS EXAMPLES
+
+Contents
+--------
+
+These examples include several Python packages that you can
+import from the Python interpreter. Each module includes
+documentation in the code itself.
+
+We have also included several executable Python scripts that
+make use of these modules.
+
+Directories:
+
+bin/  - Executable Python scripts
+
+data/ - Data files
+
+src/
+  cs123/
+     classification/ - Data classification algorithms
+     clustering/     - Data clustering algorithms
+     ngram/          - Processing the ngram dataset
+     topk/           - top-K/max algorithms
+     data/           - Code to access various data formats
+     common/         - Code used by all the above
+
+
+Before you start
+----------------
+
+These examples require the following Python libraries:
+
+    numpy
+    matplotlib
+    tweetstream    
+    PIL
+
+All of these can be installed using pip (http://www.pip-installer.org/)
+
+Once you have these libraries, you need to set your PYTHONPATH to
+include the "src" directory. On BASH, just run this from the
+same directory as this README file:
+
+    export PYTHONPATH=`pwd`/src:$PYTHONPATH
+
+Once you've done that, you will be able to import the modules, and
+will also be able to run the executable Python scripts.
+
+
+Executables
+-----------
+
+To get a more detailed description of any of these executables, just run them
+with the "-h" option
+
+max_multiproc.py  - Finds maximum value in a file using multiple processes
+topk_heap.py      - Finds maximum value in a file using a priority queue
+topk_lossy.py     - Finds most frequent values in a file using a lossy counter
+topk_twitter.py   - Finds most frequent hashtags in the public Twitter stream
+
+kmeans_2d.py      - Runs k-means on a 2-dimensional dataset
+kmeans_mnist.py   - Runs k-means on the MNIST dataset
+
+knn_mnist.py      - Run k-nearest-neighbors on the MNIST dataset
+
+mnist_show.py     - Visualize a single MNIST digit
+
+
+
