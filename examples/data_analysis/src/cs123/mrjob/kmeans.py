@@ -8,7 +8,8 @@ import numpy
 import pickle
 
 from mrjob.job import MRJob
-from kmeans_jobs import MRKMeansChooseInitialCentroids, MRKMeansUpdateCentroids
+from kmeans_centroid_selector import MRKMeansChooseInitialCentroids
+from kmeans_centroid_updater import MRKMeansUpdateCentroids
 
 def extract_centroids(job, runner):
     c = []
