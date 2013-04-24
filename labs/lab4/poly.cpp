@@ -35,6 +35,6 @@ int Polynomial::getNumPolynomials() {
 // Global operators
 
 // Printing the class
-std::ostream& operator<<(const std::ostream &out, const Polynomial &p) {
+std::ostream& operator<<(std::ostream &out, const Polynomial &p) {
     return out << p.a << "*x^2 + " << p.b << "*x + " << p.c;
 }
