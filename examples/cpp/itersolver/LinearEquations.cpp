@@ -1,8 +1,11 @@
 /*
- * LinearEquations.cpp
+ * CMSC 12300 - Computer Science with Applications 3
+ * Borja Sotomayor, 2013
  *
- *  Created on: Apr 24, 2013
- *      Author: borja
+ * Implementation of the LinearEquations class.
+ *
+ * See LinearEquations.h for more details on what each function does
+ *
  */
 
 #include "LinearEquations.h"
@@ -11,15 +14,15 @@ using namespace std;
 
 LinearEquations LinearEquations::fromText(std::istream &is) {
 	int numEq, numVar;
-	float **A, *b;
+	double **A, *b;
 
 	is >> numEq >> numVar;
 
-	A = new float*[numEq];
+	A = new double*[numEq];
 	for(int i = 0; i<numEq; i++) {
-	    A[i] = new float[numVar];
+	    A[i] = new double[numVar];
 	}
-	b = new float[numEq];
+	b = new double[numEq];
 
 	for(int i=0; i<numEq; i++)
 	{
@@ -45,15 +48,15 @@ LinearEquations::~LinearEquations() {
 	delete[] b;
 }
 
-LinearEquations::LinearEquations(float **A, float *b, int numEq, int numVar):
+LinearEquations::LinearEquations(double **A, double *b, int numEq, int numVar):
 		A(A), b(b), numEq(numEq), numVar(numVar)
 {
 	// Empty
 }
 
-float* LinearEquations::apply(float x[]) const
+double* LinearEquations::apply(double x[]) const
 {
-	float *b = new float[numEq];
+	double *b = new double[numEq];
 
 	for(int i=0; i<numEq; i++)
 		for(int j=0; j<numVar; j++)

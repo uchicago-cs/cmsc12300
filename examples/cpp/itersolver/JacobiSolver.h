@@ -1,8 +1,13 @@
 /*
- * JacobiSolver.h
+ * CMSC 12300 - Computer Science with Applications 3
+ * Borja Sotomayor, 2013
  *
- *  Created on: Apr 24, 2013
- *      Author: borja
+ * Subclass of the Solver class that implements the
+ * Jacobi method.
+ *
+ * Does not add any additional methods; simply provides
+ * an implementation of all the abstract methods.
+ *
  */
 
 #ifndef JACOBISOLVER_H_
@@ -13,11 +18,12 @@
 class JacobiSolver: public Solver {
 
 private:
-	bool hasConverged();
+	void chooseInitialValues();
 	void doIteration();
+	bool hasConverged();
 
 public:
-	JacobiSolver(const LinearEquations &leq, int maxiter = 100);
+	JacobiSolver(const LinearEquations &leq, int maxiter = 10000);
 	virtual ~JacobiSolver();
 };
 
