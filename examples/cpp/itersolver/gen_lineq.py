@@ -21,7 +21,8 @@ import random
 
 N = int(sys.argv[1])
 if len(sys.argv) == 3:
-    seed = sys.argv[2]
+    seed = int(sys.argv[2])
+    random.seed(seed)
 
 print N, N
 
