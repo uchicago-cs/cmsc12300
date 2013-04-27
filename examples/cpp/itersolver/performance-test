@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ $# -ne 4 ];
+then
+    echo "Usage: $0 commands params iterations outfile"
+    exit 1
+fi
+
+CMDS=`cat $1`
+PARAMS=`cat $2`
+ITERS=$3
+OUTFILE=$4
+
+echo "cmd,param,time" > $OUTFILE
+
+for PARAM in $PARAMS;
+do
+    for CMD in $CMDS;
+    do
+        for i in `seq $ITERS`;
+        do
+            echo -n "Running $CMD $PARAM... "
+            TIME=$(/usr/bin/time -f"%e" ./$CMD $PARAM 2>&1 >/dev/null)
+            echo "done! ($TIME)"
+
+            echo "$CMD,$PARAM,$TIME" >> $OUTFILE
+        done
+    done
+done
+
