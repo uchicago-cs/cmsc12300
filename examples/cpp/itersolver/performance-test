@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# CMSC 12300 - Computer Science with Applications 3
+# Borja Sotomayor, 2013
+
+# This script generates running time data for several
+# executables, and stores it in a CSV file.
+#
+# It takes four parameters:
+#
+# - A file with the list of commands to run.
+# - A file with the list of parameters to run with those
+#   commands. Note that every possible command-parameter
+#   combination will be used.
+# - The number of times each combination should be run
+#   (you don't want to rely on a single measurement;
+#   e.g., the graph script will take all the measurements
+#   for a given command-parameter combination, and will
+#   use the average running time)
+# - The CSV output file
+
 if [ $# -ne 4 ];
 then
     echo "Usage: $0 commands params iterations outfile"

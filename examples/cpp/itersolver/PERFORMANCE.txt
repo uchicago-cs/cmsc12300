@@ -1,0 +1,49 @@
+To run performance tests on all the solvers, do the following:
+
+1. Generate the linear equation systems files:
+
+    mkdir leqs
+    ./gen_lineq.py 50 42 > leqs/leq.50.txt
+    ./gen_lineq.py 100 42 > leqs/leq.100.txt
+    ./gen_lineq.py 150 42 > leqs/leq.150.txt
+    ./gen_lineq.py 200 42 > leqs/leq.200.txt
+    ./gen_lineq.py 250 42 > leqs/leq.250.txt
+    ./gen_lineq.py 300 42 > leqs/leq.300.txt
+    ./gen_lineq.py 350 42 > leqs/leq.350.txt
+    ./gen_lineq.py 400 42 > leqs/leq.400.txt
+    ./gen_lineq.py 450 42 > leqs/leq.450.txt
+    ./gen_lineq.py 500 42 > leqs/leq.500.txt
+    ./gen_lineq.py 550 42 > leqs/leq.550.txt
+    ./gen_lineq.py 600 42 > leqs/leq.600.txt
+    ./gen_lineq.py 650 42 > leqs/leq.650.txt
+    ./gen_lineq.py 700 42 > leqs/leq.700.txt
+    ./gen_lineq.py 750 42 > leqs/leq.750.txt
+    ./gen_lineq.py 800 42 > leqs/leq.800.txt
+    ./gen_lineq.py 850 42 > leqs/leq.850.txt
+    ./gen_lineq.py 900 42 > leqs/leq.900.txt
+    ./gen_lineq.py 950 42 > leqs/leq.950.txt
+    ./gen_lineq.py 1000 42 > leqs/leq.1000.txt
+
+
+2. Build the C++ implementations:
+
+    make
+
+This will create two executables: jacobi and jacobi-noopt. The latter disables all compiler optimizations.
+
+
+3. Run the performance testing script:
+
+    ./performance-test solvers.txt leqs.txt 3 results.csv
+
+Note: The jacobi.py implementation gets *very* slow once you hit 500 variables. You can wait for it to run, or simply stop running jacobi.py after 500 variables. To do this, you would have to run the performance-test script twice: once with jacobi.py in the solvers.txt file (and with leqs.txt going only up to 500), and again without jacobi.py (with the full leqs.txt file). Make sure that each run saves the data to a separate CSV file (you will need to manually merge the two CSV files before generating the graph).
+
+
+4. Generate the graph:
+
+    ./graph.py results.csv
+
+You can uncomment the line "pylab.yscale("log")" to generate a graph with a log-scale in the Y axis.
+
+
+
