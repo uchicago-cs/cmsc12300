@@ -10,12 +10,12 @@ DEPS = $(OBJS:.o=.d)
 CXX = g++
 CXXFLAGS = -std=c++0x -Wall -MMD -MP $(OPTIMIZE_FLAG)
 BIN = rmine
-LDLIBS = -pthread
+LDLIBS = -pthread -lrt
 
 all: $(BIN)
 
 $(BIN): $(OBJS) 
-	$(CXX) $(LDFLAGS) $(LDLIBS) $(OBJS) -o $(BIN)
+	$(CXX) $(LDFLAGS) $(OBJS) -o $(BIN) $(LDLIBS)
 		
 %.d: %.cpp
 

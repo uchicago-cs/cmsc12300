@@ -46,8 +46,11 @@ public:
 	Minefield(const Minefield &mf);
 	~Minefield();
 
-	void solve();
-	void solve_range(int x_min, int x_max, int y_min, int y_max);
+	int getNumRows();
+	int getNumCols();
+
+	void solve(int radius = 1, EntryType entries = MINE);
+	void solve_range(int x_min, int x_max, int y_min, int y_max, int radius = 1, EntryType entries = MINE);
 
 	MinefieldEntry getEntry(int row, int col);
 
@@ -57,7 +60,7 @@ public:
 private:
 	inline int i(int x, int y) { return x*cols + y; }
 
-	void processMine(int x, int y, int radius=1);
+	void processEntry(int x, int y, EntryType type, int radius=1);
 };
 
 #endif /* MINEFIELD_H_ */
