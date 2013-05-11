@@ -1,0 +1,6 @@
+jacobi
+jacobi-noopt
+jacobi.py
+jacobi_np.py
+jacobi_np2.py
+jacobi_np_linalg.py
