@@ -146,9 +146,9 @@ std::istream& operator>>(std::istream &is, Minefield &mf)
 
 	for(int i=0; i < mf.rows*mf.cols; i++)
 	{
-		int x;
+		string x;
 		is >> x;
-		mf.field[i].setType(x?MINE:EMPTY);
+		mf.field[i].setType(x=="X"?MINE:EMPTY);
 	}
 
 	return is;
