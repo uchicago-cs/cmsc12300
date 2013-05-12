@@ -5,21 +5,24 @@ else
 endif
 
 
-OBJS = Minefield.o rmine.o
-DEPS = $(OBJS:.o=.d)
+OBJS = Minefield.o
 CXX = g++
 CXXFLAGS = -std=c++0x -Wall -MMD -MP $(OPTIMIZE_FLAG)
-BIN = rmine
 LDLIBS = -pthread -lrt
+BINS = rmine fieldgen
+DEPS = $(OBJS:.o=.d) $(BINS:=.d)
 
-all: $(BIN)
+all: $(BINS)
 
-$(BIN): $(OBJS) 
-	$(CXX) $(LDFLAGS) $(OBJS) -o $(BIN) $(LDLIBS)
+rmine: $(OBJS) rmine.o
+	$(CXX) $(LDFLAGS) $(OBJS) rmine.o -o rmine $(LDLIBS)
+
+fieldgen: $(OBJS) fieldgen.o
+	$(CXX) $(LDFLAGS) $(OBJS) fieldgen.o -o fieldgen $(LDLIBS)
 		
 %.d: %.cpp
 
 clean:
-	-rm -f $(OBJS) $(BIN) *.d
+	-rm -f $(OBJS) $(BINS:=.o) $(BINS) *.d
 	
 -include $(DEPS)
