@@ -12,6 +12,8 @@
 
 class Minefield;
 
+enum StrategyType { ADD_AROUND_MINES, COUNT_MINES_AROUND_EMPTIES };
+
 enum EntryType { EMPTY, MINE };
 
 class MinefieldEntry {
@@ -49,8 +51,8 @@ public:
 	int getNumRows();
 	int getNumCols();
 
-	void solve(int radius = 1, EntryType entries = MINE);
-	void solve_range(int x_min, int x_max, int y_min, int y_max, int radius = 1, EntryType entries = MINE);
+	void solve(int radius = 1, StrategyType strategy = ADD_AROUND_MINES);
+	void solve_range(int x_min, int x_max, int y_min, int y_max, int radius = 1, StrategyType strategy = ADD_AROUND_MINES);
 
 	MinefieldEntry getEntry(int row, int col);
 
@@ -60,7 +62,7 @@ public:
 private:
 	inline int i(int x, int y) { return x*cols + y; }
 
-	void processEntry(int x, int y, EntryType type, int radius=1);
+	void processEntry(int x, int y, StrategyType strategy, int radius=1);
 };
 
 #endif /* MINEFIELD_H_ */

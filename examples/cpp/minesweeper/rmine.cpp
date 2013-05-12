@@ -14,24 +14,11 @@ using namespace std;
 
 #include "Minefield.h"
 
-
-enum StrategyType { SOLVE_MINES, SOLVE_EMPTY, SOLVE_ADAPTIVE };
-
-const string USAGE = "-f FILE [-t THREADS] [-r RADIUS] [-s (mines|empty|adaptive)] [-v]";
+const string USAGE = "-f FILE [-t THREADS] [-r RADIUS] [-s (mines|empty)] [-v]";
 
 void solverThread(Minefield *mf, int x_min, int x_max, int y_min, int y_max, int radius, StrategyType strategy)
 {
-	EntryType e;
-	switch(strategy)
-	{
-	case SOLVE_MINES:
-		e = MINE;
-		break;
-	case SOLVE_EMPTY:
-		e = EMPTY;
-		break;
-	}
-	mf->solve_range(x_min, x_max, y_min, y_max, radius, e);
+	mf->solve_range(x_min, x_max, y_min, y_max, radius, strategy);
 }
 
 
@@ -48,7 +35,8 @@ int main(int argc, char* argv[])
 	// Radius
 	int radius = 1;
 	// Solving strategy
-	StrategyType strategy = SOLVE_MINES;
+	char *strategyname = NULL;
+	StrategyType strategy;
 
 	// Parse command-line options
 	while ((opt = getopt(argc, argv, "f:t:s:r:vh")) != -1)
@@ -64,17 +52,7 @@ int main(int argc, char* argv[])
 				radius = atoi(optarg);
 				break;
 			case 's':
-				if(!strcmp(optarg,"mines"))
-					strategy = SOLVE_MINES;
-				else if(!strcmp(optarg,"empty"))
-					strategy = SOLVE_EMPTY;
-				else if(!strcmp(optarg,"adaptive"))
-					strategy = SOLVE_ADAPTIVE;
-				else
-				{
-					cerr << "Usage: " << argv[0] << " " << USAGE << endl;
-					cerr << "ERROR: Unknown strategy '" << optarg << "'" << endl;
-				}
+				strategyname = strdup(optarg);
 				break;
 			case 'v':
 				verbose = true;
@@ -92,6 +70,19 @@ int main(int argc, char* argv[])
 		exit(-1);
 	}
 
+	if(!strategyname)
+		strategyname = strdup("mines");
+
+	if(!strcmp(strategyname,"mines"))
+		strategy = ADD_AROUND_MINES;
+	else if(!strcmp(strategyname,"empty"))
+		strategy = COUNT_MINES_AROUND_EMPTIES;
+	else
+	{
+		cerr << "Usage: " << argv[0] << " " << USAGE << endl;
+		cerr << "ERROR: Unknown strategy '" << optarg << "'" << endl;
+		exit(-1);
+	}
 
 	struct timespec start, finish, cpustart, cpufinish;
 	double elapsed, cpuelapsed;

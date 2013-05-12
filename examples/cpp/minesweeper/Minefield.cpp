@@ -50,7 +50,6 @@ Minefield::Minefield(int rows, int cols): rows(rows), cols(cols)
 
 Minefield::Minefield(const Minefield &mf)
 {
-	cout << "COPY" << endl;
 	this->rows = mf.rows;
 	this->cols = mf.cols;
 	this->field = new MinefieldEntry[rows*cols];
@@ -73,19 +72,19 @@ int Minefield::getNumCols()
 	return cols;
 }
 
-void Minefield::solve_range(int x_min, int x_max, int y_min, int y_max, int radius, EntryType entries)
+void Minefield::solve_range(int x_min, int x_max, int y_min, int y_max, int radius, StrategyType strategy)
 {
 	for (int x=x_min; x < x_max; x++)
 		for (int y=y_min; y < y_max; y++)
-			if (entries == MINE && field[i(x,y)].getType() == MINE)
-				processEntry(x, y, MINE, radius);
-			else if (entries == EMPTY && field[i(x,y)].getType() == EMPTY)
-				processEntry(x,y, EMPTY, radius);
+			if (strategy == ADD_AROUND_MINES && field[i(x,y)].getType() == MINE)
+				processEntry(x, y, strategy, radius);
+			else if (strategy == COUNT_MINES_AROUND_EMPTIES && field[i(x,y)].getType() == EMPTY)
+				processEntry(x,y, strategy, radius);
 }
 
-void Minefield::solve(int radius, EntryType entries)
+void Minefield::solve(int radius, StrategyType strategy)
 {
-	solve_range(0, rows, 0, cols, radius, entries);
+	solve_range(0, rows, 0, cols, radius, strategy);
 }
 
 
@@ -138,7 +137,7 @@ std::istream& operator>>(std::istream &is, Minefield &mf)
 	return is;
 }
 
-void Minefield::processEntry(int x, int y, EntryType type, int radius)
+void Minefield::processEntry(int x, int y, StrategyType strategy, int radius)
 {
 	int x_min, x_max, y_min, y_max;
 
@@ -152,9 +151,9 @@ void Minefield::processEntry(int x, int y, EntryType type, int radius)
 		for(int y2=y_min; y2<=y_max; y2++)
 			if(!(x2==x && y2==y))
 			{
-				if(type == MINE)
+				if(strategy == ADD_AROUND_MINES)
 					field[i(x2,y2)]++;
-				if(type == EMPTY && field[i(x2,y2)].getType()==MINE)
+				if(strategy == COUNT_MINES_AROUND_EMPTIES && field[i(x2,y2)].getType()==MINE)
 					field[i(x,y)]++;
 			}
 }
