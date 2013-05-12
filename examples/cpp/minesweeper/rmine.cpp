@@ -147,7 +147,7 @@ int main(int argc, char* argv[])
 		cout << endl << "Solved minefield in " << elapsed << "s (CPU: " << cpuelapsed << "s)" << endl;
 	}
 	else
-		cout << elapsed << "," << cpuelapsed << endl;
+		cout << fname << "," << nthreads << "," << strategyname << "," << radius << "," << elapsed << "," << cpuelapsed << endl;
 
     return 0;
 }
