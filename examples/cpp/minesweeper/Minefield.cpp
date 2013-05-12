@@ -6,6 +6,7 @@
  */
 
 #include<algorithm>
+#include<random>
 using namespace std;
 
 #include "Minefield.h"
@@ -46,6 +47,22 @@ Minefield::Minefield(): rows(0), cols(0), field(NULL)
 Minefield::Minefield(int rows, int cols): rows(rows), cols(cols)
 {
 	this->field = new MinefieldEntry[rows*cols];
+}
+
+Minefield::Minefield(int rows, int cols, float pmine, int seed): rows(rows), cols(cols)
+{
+	default_random_engine generator(seed);
+	uniform_real_distribution<float> distribution(0.0, 1.0);
+
+	this->field = new MinefieldEntry[rows*cols];
+
+	for(int i=0; i<rows*cols; i++)
+	{
+		float v = distribution(generator);
+		EntryType type = v < pmine? MINE : EMPTY;
+		this->field[i].setType(type);
+	}
+
 }
 
 Minefield::Minefield(const Minefield &mf)

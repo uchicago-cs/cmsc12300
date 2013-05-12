@@ -45,6 +45,7 @@ class Minefield {
 public:
 	Minefield();
 	Minefield(int rows, int cols);
+	Minefield(int rows, int cols, float pmine, int seed);
 	Minefield(const Minefield &mf);
 	~Minefield();
 
