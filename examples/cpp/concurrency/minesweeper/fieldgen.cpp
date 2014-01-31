@@ -1,12 +1,14 @@
 /*
- * rmine.cpp
+ * CMSC 12300 - Computer Science with Applications 3
+ * Borja Sotomayor, 2013
  *
- *  Created on: May 3, 2013
- *      Author: borja
+ * Minefield generator.
+ *
  */
 
 #include <thread>
 #include <iostream>
+#include <unistd.h>
 #include <fstream>
 #include <random>
 #include <time.h>
@@ -23,7 +25,7 @@ int main(int argc, char* argv[])
 	int opt;
 	// Minefield file
 	char *fname = NULL;
-	ostream *os = &cout;
+	ostream *os = &cout; // Use stdout by default
 	// Number of rows and columns
 	int x = 0, y = 0;
 	// Percent of mines

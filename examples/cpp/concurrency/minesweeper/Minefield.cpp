@@ -17,14 +17,14 @@ MinefieldEntry::MinefieldEntry(EntryType t)
 	this->adjacentMines = 0;
 }
 
-void MinefieldEntry::setType(EntryType t)
-{
-	this->type = t;
-}
-
 EntryType MinefieldEntry::getType()
 {
 	return this->type;
+}
+
+int MinefieldEntry::getAdjacentMines()
+{
+	return this->adjacentMines;
 }
 
 int MinefieldEntry::operator++()
@@ -60,7 +60,7 @@ Minefield::Minefield(int rows, int cols, float pmine, int seed): rows(rows), col
 	{
 		float v = distribution(generator);
 		EntryType type = v < pmine? MINE : EMPTY;
-		this->field[i].setType(type);
+		this->field[i].type = type;
 	}
 
 }
@@ -104,6 +104,14 @@ void Minefield::solve(int radius, StrategyType strategy)
 	solve_range(0, rows, 0, cols, radius, strategy);
 }
 
+void Minefield::reset()
+{
+	for(int i=0; i<rows*cols; i++)
+	{
+		if(this->field[i].type == EMPTY)
+			this->field[i].adjacentMines = 0;
+	}
+}
 
 std::ostream& operator<<(std::ostream &os, const Minefield &mf)
 {
@@ -148,7 +156,7 @@ std::istream& operator>>(std::istream &is, Minefield &mf)
 	{
 		string x;
 		is >> x;
-		mf.field[i].setType(x=="X"?MINE:EMPTY);
+		mf.field[i].type = (x=="X"?MINE:EMPTY);
 	}
 
 	return is;

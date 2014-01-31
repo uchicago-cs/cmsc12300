@@ -7,6 +7,7 @@
 
 #include <thread>
 #include <iostream>
+#include <unistd.h>
 #include <fstream>
 #include <time.h>
 #include <string.h>
@@ -14,7 +15,7 @@ using namespace std;
 
 #include "Minefield.h"
 
-const string USAGE = "-f FILE [-t THREADS] [-r RADIUS] [-s (mines|empty)] [-v]";
+const string USAGE = "-f FILE [-t THREADS] [-r RADIUS] [-s (mines|empty)] [-i ITERS] [-v]";
 
 void solverThread(Minefield *mf, int x_min, int x_max, int y_min, int y_max, int radius, StrategyType strategy)
 {
@@ -34,12 +35,14 @@ int main(int argc, char* argv[])
 	int nthreads = 1;
 	// Radius
 	int radius = 1;
+	// Iterations
+	int iterations = 1;
 	// Solving strategy
 	char *strategyname = NULL;
 	StrategyType strategy;
 
 	// Parse command-line options
-	while ((opt = getopt(argc, argv, "f:t:s:r:vh")) != -1)
+	while ((opt = getopt(argc, argv, "f:t:s:r:i:vh")) != -1)
 		switch (opt)
 		{
 			case 'f':
@@ -50,6 +53,9 @@ int main(int argc, char* argv[])
 				break;
 			case 'r':
 				radius = atoi(optarg);
+				break;
+			case 'i':
+				iterations = atoi(optarg);
 				break;
 			case 's':
 				strategyname = strdup(optarg);
@@ -88,7 +94,6 @@ int main(int argc, char* argv[])
 	double elapsed, cpuelapsed;
 
 	ifstream f(fname);
-	thread *threads = new thread[nthreads];
 
 	Minefield mf;
 
@@ -104,50 +109,57 @@ int main(int argc, char* argv[])
 			cout << endl << mf;
 	}
 
-	clock_gettime(CLOCK_MONOTONIC, &start);
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpustart);
-
-	int chunksize = mf.getNumRows() / nthreads;
-    for (int i = 0; i < nthreads; i++)
-    {
-    	int x_min = i * chunksize;
-    	int x_max = (i+1) * chunksize;
-    	if(i==nthreads - 1)
-    		x_max += mf.getNumRows() % nthreads;
-    	int y_min = 0;
-    	int y_max = mf.getNumCols();
-
-    	if(verbose)
-    		cout << "Spawning thread to process (" << x_min << ", " << y_min << ") -> (" << x_max << ", " << y_max << ")" << endl;
-
-        threads[i] = thread(solverThread, &mf, x_min, x_max, y_min, y_max, radius, strategy);
-    }
-
-	//Join threads
-	for (int i = 0; i < nthreads; i++)
-		threads[i].join();
-
-	delete[] threads;
-
-	clock_gettime(CLOCK_MONOTONIC, &finish);
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpufinish);
-
-	elapsed = (finish.tv_sec - start.tv_sec);
-	elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-
-	cpuelapsed = (cpufinish.tv_sec - cpustart.tv_sec);
-	cpuelapsed += (cpufinish.tv_nsec - cpustart.tv_nsec) / 1000000000.0;
-
-	if(verbose)
+	for(int i=0; i<iterations; i++)
 	{
-		if (mf.getNumRows() < 100 && mf.getNumCols() < 100)
+		thread *threads = new thread[nthreads];
+
+		clock_gettime(CLOCK_MONOTONIC, &start);
+		clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpustart);
+
+		int chunksize = mf.getNumRows() / nthreads;
+		for (int i = 0; i < nthreads; i++)
 		{
-			cout << endl << mf;
+			int x_min = i * chunksize;
+			int x_max = (i+1) * chunksize;
+			if(i==nthreads - 1)
+				x_max += mf.getNumRows() % nthreads;
+			int y_min = 0;
+			int y_max = mf.getNumCols();
+
+			if(verbose)
+				cout << "Spawning thread to process (" << x_min << ", " << y_min << ") -> (" << x_max << ", " << y_max << ")" << endl;
+
+			threads[i] = thread(solverThread, &mf, x_min, x_max, y_min, y_max, radius, strategy);
 		}
-		cout << endl << "Solved minefield in " << elapsed << "s (CPU: " << cpuelapsed << "s)" << endl;
+
+		//Join threads
+		for (int i = 0; i < nthreads; i++)
+			threads[i].join();
+
+		delete[] threads;
+
+		clock_gettime(CLOCK_MONOTONIC, &finish);
+		clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &cpufinish);
+
+		elapsed = (finish.tv_sec - start.tv_sec);
+		elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
+
+		cpuelapsed = (cpufinish.tv_sec - cpustart.tv_sec);
+		cpuelapsed += (cpufinish.tv_nsec - cpustart.tv_nsec) / 1000000000.0;
+
+		if(verbose)
+		{
+			if (mf.getNumRows() < 100 && mf.getNumCols() < 100)
+			{
+				cout << endl << mf;
+			}
+			cout << endl << "Solved minefield in " << elapsed << "s (CPU: " << cpuelapsed << "s)" << endl;
+		}
+		else
+			cout << fname << "," << nthreads << "," << strategyname << "," << radius << "," << elapsed << "," << cpuelapsed << endl;
+
+		mf.reset();
 	}
-	else
-		cout << fname << "," << nthreads << "," << strategyname << "," << radius << "," << elapsed << "," << cpuelapsed << endl;
 
     return 0;
 }
