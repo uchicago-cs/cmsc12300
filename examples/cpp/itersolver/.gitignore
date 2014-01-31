@@ -1,0 +1,5 @@
+jacobi
+jacobi-noopt
+Debug/
+Release/
+*.csv
