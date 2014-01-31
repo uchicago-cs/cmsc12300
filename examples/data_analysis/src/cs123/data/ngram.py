@@ -44,7 +44,11 @@ def find_largest(fname, debug=False):
 def find_largest_allyears_bad(fname, debug=False):
     """Takes an n-gram file and finds the most popular
     word in the dataset, taking into account that the same
-    word appears in multiple years. 
+    word appears in multiple years (i.e., it doesn't find
+    the single entry with the most occurrences; it needs
+    to add up all occurrences of each n-gram to find the
+    total occurrences of each n-gram.
+
     It runs in O(n) time and also uses O(n) space, so it is not
     a good solution for large datasets.
 
@@ -74,10 +78,18 @@ def find_largest_allyears_bad(fname, debug=False):
     return largest_gram, largest_n
 
 
-def find_largest_allyears_bad(fname, debug=False):
+def find_largest_allyears_good(fname, debug=False):
     """Takes an n-gram file and finds the most popular
     word in the dataset, taking into account that the same
-    word appears in multiple years. 
+    word appears in multiple years.
+
+    This function exploits the fact that the n-grams
+    are sorted, which means all the entries for a given
+    n-gram appear together. So, it can add up the values
+    for an n-gram before moving on to the next, and then
+    checking whether it has a higher total count than
+    the previous known maximum count.
+
     It runs in O(n) time but only needs O(1) space.
 
     Parameters:
