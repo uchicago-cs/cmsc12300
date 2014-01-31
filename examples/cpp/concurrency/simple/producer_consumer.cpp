@@ -8,6 +8,8 @@
 #include <thread>
 #include <iostream>
 #include <chrono>
+#include <mutex>
+#include <condition_variable>
 using namespace std;
 
 const unsigned int BUFFER_SIZE = 100;
@@ -19,7 +21,7 @@ condition_variable not_empty;
 condition_variable not_full;
 #endif
 
-int in = 0, out = 0, n = 0, v = 0;
+unsigned int in = 0, out = 0, n = 0, v = 0;
 
 void producer()
 {
@@ -48,7 +50,6 @@ void producer()
 
 void consumer()
 {
-	int prev_v = -1;
 	int data;
 
 	while(true)

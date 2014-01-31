@@ -11,6 +11,8 @@
 #include <chrono>
 #include <vector>
 #include <atomic>
+#include <mutex>
+#include <condition_variable>
 using namespace std;
 
 vector<thread> rwthreads;
@@ -47,6 +49,7 @@ void reader()
 	lock.unlock();
 
 	this_thread::sleep_for(chrono::milliseconds(500));
+
 	{
 		lock_guard<mutex> consolelock(console);
 		cout << "Read value: " << value << endl;

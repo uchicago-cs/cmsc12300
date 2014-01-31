@@ -8,6 +8,8 @@
 #include <thread>
 #include <iostream>
 #include <chrono>
+#include <mutex>
+#include <condition_variable>
 using namespace std;
 
 mutex m;
@@ -34,10 +36,11 @@ int main(int argc, char* argv[])
 {
 	setup_done = false;
 
+	unique_lock<mutex> lock(m);
+
 	cout << "MAIN: Launching worker thread" << endl;
 	thread wt = thread(worker_thread);
 
-	unique_lock<mutex> lock(m);
 	while(!setup_done)
 		cv_setup_done.wait(lock);
 	cout << "MAIN: Setup done." << endl;

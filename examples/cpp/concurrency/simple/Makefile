@@ -5,7 +5,10 @@ else
 endif
 
 
-BINS = 2threads 2threads-2 counter async
+BINS = 2threads 2threads-2 counter async \
+       counter_atomic counter_mutex counter_lock_guard \
+       condvar producer_consumer \
+       readwrite-simple readwrite-better readwrite-best
 DEPS = $(OBJS:.o=.d)
 CXX = g++
 CXXFLAGS = -std=c++0x -Wall -MMD -MP $(OPTIMIZE_FLAG)
