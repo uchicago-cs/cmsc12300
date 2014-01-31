@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# CMSC 12300 - Computer Science with Applications 3
+# Borja Sotomayor, 2013
+
+# This script runs the minesweeper solver under
+# multiple configurations and collects all the
+# results into a single CSV file.
+#
+# It takes four parameters:
+#
+# - A file with the list of minefield files to use
+# - A file with the list of parameters to use when
+#   running the minesweeper solver. Note that every 
+#   possible minefield-parameter combination will be used.
+# - The number of times each combination should be run
+#   (you don't want to rely on a single measurement;
+#   e.g., the graph script will take all the measurements
+#   for a given command-parameter combination, and will
+#   use the average running time)
+# - The CSV output file
+
+if [ $# -ne 4 ];
+then
+    echo "Usage: $0 minefields params iterations outfile"
+    exit 1
+fi
+
+MINESOLVER="rmine"
+
+FILES=`cat $1`
+PARAMS=`cat $2`
+ITERS=$3
+OUTFILE=$4
+
+echo "fname,nthreads,strategyname,radius,elapsed,cpuelapsed" > $OUTFILE
+
+IFS=$'\n'
+
+for PARAM in $PARAMS;
+do
+    for FILE in $FILES;
+    do
+        CMD="$MINESOLVER -f $FILE -i $ITERS $PARAM"
+        echo -n "Running $CMD..."
+        IFS=' '
+        ./$CMD >> $OUTFILE
+        IFS=$'\n'
+        echo "done"
+    done
+done
+

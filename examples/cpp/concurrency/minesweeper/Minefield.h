@@ -12,6 +12,8 @@
 
 class Minefield;
 
+enum StrategyType { ADD_AROUND_MINES, COUNT_MINES_AROUND_EMPTIES };
+
 enum EntryType { EMPTY, MINE };
 
 class MinefieldEntry {
@@ -21,11 +23,8 @@ class MinefieldEntry {
 public:
 	MinefieldEntry(EntryType t = EMPTY);
 
-	void setType(EntryType t);
 	EntryType getType();
-
-	void setAdjacentMines(EntryType t);
-	EntryType getAdjacentMines();
+	int getAdjacentMines();
 
 	string toString();
 
@@ -34,6 +33,8 @@ public:
 
 	friend std::ostream& operator<<(std::ostream &os, const Minefield &mf);
 	friend std::istream& operator>>(std::istream &is, Minefield &mf);
+
+	friend class Minefield;
 };
 
 class Minefield {
@@ -43,14 +44,16 @@ class Minefield {
 public:
 	Minefield();
 	Minefield(int rows, int cols);
+	Minefield(int rows, int cols, float pmine, int seed);
 	Minefield(const Minefield &mf);
 	~Minefield();
 
 	int getNumRows();
 	int getNumCols();
 
-	void solve(int radius = 1, EntryType entries = MINE);
-	void solve_range(int x_min, int x_max, int y_min, int y_max, int radius = 1, EntryType entries = MINE);
+	void solve(int radius = 1, StrategyType strategy = ADD_AROUND_MINES);
+	void solve_range(int x_min, int x_max, int y_min, int y_max, int radius = 1, StrategyType strategy = ADD_AROUND_MINES);
+	void reset();
 
 	MinefieldEntry getEntry(int row, int col);
 
@@ -60,7 +63,7 @@ public:
 private:
 	inline int i(int x, int y) { return x*cols + y; }
 
-	void processEntry(int x, int y, EntryType type, int radius=1);
+	void processEntry(int x, int y, StrategyType strategy, int radius=1);
 };
 
 #endif /* MINEFIELD_H_ */
