@@ -14,24 +14,24 @@
 #include <json/json.h>
 using namespace std;
 
-USAGovJSONException::USAGovJSONException(const char* reason) throw()
+GitHubEventJSONException::GitHubEventJSONException(const char* reason) throw()
 {
 
 	this->reason = strdup(reason);
 }
 
 
-const char* USAGovJSONException::what() const throw()
+const char* GitHubEventJSONException::what() const throw()
 {
 	return reason;
 }
 
-USAGovClick::USAGovClick() {
+GitHubActivityEvent::GitHubActivityEvent() {
 
 }
 
 
-USAGovClick::USAGovClick(string json) {
+GitHubActivityEvent::GitHubActivityEvent(string json) {
 	// Create a JSON reader
 	Json::Reader reader;
 	Json::Value root;
@@ -39,12 +39,10 @@ USAGovClick::USAGovClick(string json) {
 	// Parse the JSON
 	if (!reader.parse(json, root))
 	{
-		throw USAGovJSONException(("Failed to parse JSON: " + reader.getFormattedErrorMessages()).c_str());
+		throw GitHubEventJSONException(("Failed to parse JSON: " + reader.getFormattedErrorMessages()).c_str());
 	}
 
-	// The 1.usa.gov stream sometimes returns heartbeat messages.
-	// We can filter them simply by checking whether any of the
-	// attributes is present (arbitrarily, we choose "a")
+    /*
 	if(!root.isMember("a"))
 		throw USAGovJSONException("Does not have 'a'");
 
@@ -66,9 +64,10 @@ USAGovClick::USAGovClick(string json) {
     timezone = root.get("tz", Json::Value::null).asString();
     hashTimestamp = root.get("hc", Json::Value::null).asLargestUInt();
     acceptLanguage = root.get("al", Json::Value::null).asString();
+    */
 }
 
 
-USAGovClick::~USAGovClick() {
+GitHubActivityEvent::~GitHubActivityEvent() {
 
 }

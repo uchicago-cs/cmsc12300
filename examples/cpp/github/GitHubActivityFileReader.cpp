@@ -13,29 +13,28 @@
 #include <iostream>
 using namespace std;
 
-USAGovClickFileReader::USAGovClickFileReader(istream &is):is(is) {
+GitHubActivityFileReader::GitHubActivityFileReader(istream &is):is(is) {
 
 
 }
 
-USAGovClickFileReader::~USAGovClickFileReader() {
+GitHubActivityFileReader::~GitHubActivityFileReader() {
 
 }
 
-bool USAGovClickFileReader::done()
+bool GitHubActivityFileReader::done()
 {
 	// If the EOF is reached, we have no more clicks.
 	return is.eof();
 }
 
 
-USAGovClick USAGovClickFileReader::next()
+GitHubActivityEvent GitHubActivityFileReader::next()
 {
-	// Read in one line, and parse it (using the USAGovClick class)
-	string line;
-	getline(is, line);
-	USAGovClick click;
+	GitHubActivityEvent event;
 
+
+    /*
 	try
 	{
 		click = USAGovClick(line);
@@ -43,6 +42,7 @@ USAGovClick USAGovClickFileReader::next()
 	{
 		throw USAGovClickReaderException(e.what());
 	}
+    */
 
-	return click;
+	return event;
 }

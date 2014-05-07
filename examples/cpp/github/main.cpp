@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 	string file = "";
 	fstream f;
 	// Click reader
-	USAGovClickReader *reader;
+	GitHubActivityReader *reader;
 
 	// Parse command-line options
 	while ((opt = getopt(argc, argv, "f:wt:d:i:vh")) != -1)
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 
 	// Create the reader
 	f.open(file);
-	reader = new USAGovClickFileReader(f);
+	reader = new GitHubActivityFileReader(f);
 
 	struct timespec start, finish;
 	double elapsed;
@@ -77,11 +77,11 @@ int main(int argc, char* argv[])
 	int n=0;
 	while(!reader->done())
 	{
-		USAGovClick click;
+		GitHubActivityEvent event;
 		try
 		{
-			click = reader->next();
-		} catch (USAGovClickReaderException &e)
+			event = reader->next();
+		} catch (GitHubActivityReaderException &e)
 		{
 			cerr << "Error reading click: " << e.what();
 			continue;

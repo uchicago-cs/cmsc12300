@@ -7,30 +7,28 @@
  *
  */
 
-#ifndef USAGOVCLICKFILEREADER_H_
-#define USAGOVCLICKFILEREADER_H_
+#ifndef GITHUBACTIVITYFILEREADER_H_
+#define GITHUBACTIVITYFILEREADER_H_
 
 #include "GitHubActivityReader.h"
 #include <iostream>
 
-class USAGovClickFileReader: public USAGovClickReader {
-	// Input stream. Reading one line
-	// from this stream yields one click
-	// (in JSON)
+class GitHubActivityFileReader: public GitHubActivityReader {
+	// Input stream.
 	std::istream &is;
 
 public:
 	// Constructor
-	// Parameter: The input stream with the click data.
-	USAGovClickFileReader(std::istream &is);
+	// Parameter: The input stream with the event data.
+	GitHubActivityFileReader(std::istream &is);
 
 	// Destructor
-	virtual ~USAGovClickFileReader();
+	virtual ~GitHubActivityFileReader();
 
-	// Implementation of USAGovClickReader abstract methods.
-	// See USAGovClickReader.h for details.
+	// Implementation of GitHubActivityReader abstract methods.
+	// See GitHubActivityReader.h for details.
 	bool done();
-	USAGovClick next();
+	GitHubActivityEvent next();
 };
 
-#endif /* USAGOVCLICKFILEREADER_H_ */
+#endif /* GITHUBACTIVITYFILEREADER_H_ */

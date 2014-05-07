@@ -2,10 +2,10 @@
  * CMSC 12300 - Computer Science with Applications 3
  * Borja Sotomayor, 2013
  *
- * An abstract class for reading a single click at a time
- * from a source of 1.USA.gov clicks
+ * An abstract class for reading a single event from
+ * a GitHub activity source.
  *
- * See USAGovClickReader.h for details
+ * See GitHubActivityReader.h for details
  *
  */
 
@@ -16,18 +16,18 @@
 using namespace std;
 
 
-USAGovClickReader::USAGovClickReader() {
+GitHubActivityReader::GitHubActivityReader() {
 }
 
-USAGovClickReader::~USAGovClickReader() {
+GitHubActivityReader::~GitHubActivityReader() {
 }
 
-USAGovClickReaderException::USAGovClickReaderException(const char* reason) throw()
+GitHubActivityReaderException::GitHubActivityReaderException(const char* reason) throw()
 {
 	this->reason = strdup(reason);
 }
 
-const char* USAGovClickReaderException::what() const throw()
+const char* GitHubActivityReaderException::what() const throw()
 {
 	return reason;
 }

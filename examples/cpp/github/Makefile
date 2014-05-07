@@ -12,9 +12,9 @@ DEPS = $(OBJS:.o=.d)
 CXX = g++
 CXXFLAGS = -std=c++0x -Wall -MMD -MP -I. $(OPTIMIZE_FLAG)
 LDLIBS = -lrt
-BIN = usagov-clicks 
+BIN = github-events 
 
-all: usagov-clicks
+all: github-events
 
 $(BIN): $(OBJS)
 	$(CXX) $(LDFLAGS) $(OBJS) -o $(BIN) $(LDLIBS)
