@@ -12,10 +12,13 @@
 
 #include "GitHubActivityReader.h"
 #include <iostream>
+#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+
 
 class GitHubActivityFileReader: public GitHubActivityReader {
 	// Input stream.
-	std::istream &is;
+	boost::iostreams::filtering_istream file;
 
 public:
 	// Constructor

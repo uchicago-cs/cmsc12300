@@ -13,8 +13,10 @@
 #include <iostream>
 using namespace std;
 
-GitHubActivityFileReader::GitHubActivityFileReader(istream &is):is(is) {
+GitHubActivityFileReader::GitHubActivityFileReader(istream &is) {
 
+        file.push(boost::iostreams::gzip_decompressor());
+        file.push(is);
 
 }
 
@@ -25,7 +27,8 @@ GitHubActivityFileReader::~GitHubActivityFileReader() {
 bool GitHubActivityFileReader::done()
 {
 	// If the EOF is reached, we have no more clicks.
-	return is.eof();
+	//return is.eof();
+    return true;
 }
 
 

@@ -11,7 +11,7 @@ OBJS = GitHubActivityReader.o GitHubActivityFileReader.o \
 DEPS = $(OBJS:.o=.d)
 CXX = g++
 CXXFLAGS = -std=c++0x -Wall -MMD -MP -I. $(OPTIMIZE_FLAG)
-LDLIBS = -lrt
+LDLIBS = -lrt -lboost_iostreams
 BIN = github-events 
 
 all: github-events

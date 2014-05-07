@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 	}
 
 	// Create the reader
-	f.open(file);
+	f.open(file, ios_base::in | ios_base::binary);
 	reader = new GitHubActivityFileReader(f);
 
 	struct timespec start, finish;
