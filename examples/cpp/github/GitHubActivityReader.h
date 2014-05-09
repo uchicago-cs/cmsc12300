@@ -12,6 +12,7 @@
 
 #include"GitHubActivityEvent.h"
 #include<exception>
+#include<string>
 
 class GitHubActivityReader {
 
@@ -29,7 +30,10 @@ public:
 	// Returns the next event in the source. This method
 	// may block if the source still has more events, but
 	// not when the next() method is called.
-	virtual GitHubActivityEvent next() = 0;
+	virtual GitHubActivityEvent* next() = 0;
+
+	// Create an event object from a JSON string
+	GitHubActivityEvent* createEvent(std::string jsonstr);
 };
 
 // Exception class to be thrown whenever there is

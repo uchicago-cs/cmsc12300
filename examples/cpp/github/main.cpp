@@ -77,10 +77,20 @@ int main(int argc, char* argv[])
 	int n=0;
 	while(!reader->done())
 	{
-		GitHubActivityEvent event;
+		GitHubActivityEvent *event;
 		try
 		{
 			event = reader->next();
+            
+            if (event)
+            {
+                cout << event->repr() << endl;
+                delete event;
+            }
+            else
+            {
+                cout << "NONE" << endl;
+            }
 		} catch (GitHubActivityReaderException &e)
 		{
 			cerr << "Error reading click: " << e.what();

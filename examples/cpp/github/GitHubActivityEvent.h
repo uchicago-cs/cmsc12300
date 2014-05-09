@@ -13,6 +13,7 @@
 
 #include<string>
 #include<exception>
+#include <json/json.h>
 
 // Exception class to be thrown whenever there is
 // an error in the GitHub Event JSON
@@ -31,19 +32,37 @@ public:
 // A single event
 class GitHubActivityEvent {
 
-    int id;
+protected:
 
+    std::string created_at;
+    std::string type;
 
 public:
     // Default constructor
     GitHubActivityEvent();
 
-    // Constructor. Takes the JSON representation of the click.
-	GitHubActivityEvent(std::string json);
+    // Constructor. Takes the JSON representation of the event.
+	GitHubActivityEvent(Json::Value &event);
+
+    virtual std::string repr() = 0;
 
 	// Destructor
 	virtual ~GitHubActivityEvent();
 
 };
+
+
+class GitHubPushEvent : public GitHubActivityEvent {
+
+    std::string ref;
+
+public:
+
+    GitHubPushEvent(Json::Value &event);
+    std::string repr();
+    ~GitHubPushEvent();
+
+};
+
 
 #endif /* GITHUBACTIVITYEVENT_H_ */

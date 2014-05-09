@@ -31,7 +31,7 @@ public:
 	// Implementation of GitHubActivityReader abstract methods.
 	// See GitHubActivityReader.h for details.
 	bool done();
-	GitHubActivityEvent next();
+	GitHubActivityEvent* next();
 };
 
 #endif /* GITHUBACTIVITYFILEREADER_H_ */
