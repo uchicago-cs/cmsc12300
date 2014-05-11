@@ -1,11 +1,12 @@
 /*
  * CMSC 12300 - Computer Science with Applications 3
- * Borja Sotomayor, 2013
+ * Borja Sotomayor, 2014
  *
- * Implementation of the USAGovClickReader abstract class
- * for click data stored in a text file.
+ * Implementation of the GitHubActivityReader abstract class
+ * for event data stored in a gzipped file, as downloaded
+ * from http://www.githubarchive.org/
  *
- * See USAGovClickFileReader.h for details
+ * See GitHubActivityFileReader.h for details
  *
  */
 

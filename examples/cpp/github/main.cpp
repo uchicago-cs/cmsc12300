@@ -1,17 +1,13 @@
 /*
  * CMSC 12300 - Computer Science with Applications 3
- * Borja Sotomayor, 2013
+ * Borja Sotomayor, 2014
  *
- * Process the 1.usa.gov click data (http://www.usa.gov/About/developer-resources/1usagov.shtml)
- * using a thread pool.
- *
- * This file is the entry point into the program. When run, the program
- * either reads a file with click data, or connects to the live stream.
+ * Print the contents of a GitHub events file (as downloaded
+ * from http://www.githubarchive.org/)
  *
  * It accepts the following command-line parameters:
  *
- *  -f FILE: File with JSON representation of clicks, as returned by
- *           the live stream.
+ *  -f FILE: Gzipped File with GitHub events in JSON.
  *
  *  -v: Verbose mode. Prints out more messages to the console.
  *
@@ -37,10 +33,10 @@ int main(int argc, char* argv[])
 	int opt;
 	// Should we be verbose?
 	bool verbose = false;
-	// File with click data
+	// File with event data
 	string file = "";
 	fstream f;
-	// Click reader
+	// Event reader
 	GitHubActivityReader *reader;
 
 	// Parse command-line options
@@ -81,19 +77,11 @@ int main(int argc, char* argv[])
 		try
 		{
 			event = reader->next();
-            
-            if (event)
-            {
-                cout << event->repr() << endl;
-                delete event;
-            }
-            else
-            {
-                cout << "NONE" << endl;
-            }
+            cout << event->repr() << endl;
+            delete event;
 		} catch (GitHubActivityReaderException &e)
 		{
-			cerr << "Error reading click: " << e.what();
+			cerr << "Error reading event: " << e.what();
 			continue;
 		}
 
@@ -109,7 +97,7 @@ int main(int argc, char* argv[])
 	{
 		cout << endl << endl;
 		cout << "Running time: " << elapsed << endl;
-		cout << "Received " << n << " clicks." << endl;
+		cout << "Processed " << n << " events." << endl;
 	}
 	else
 	{

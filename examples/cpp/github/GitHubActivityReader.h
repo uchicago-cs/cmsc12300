@@ -1,6 +1,6 @@
 /*
  * CMSC 12300 - Computer Science with Applications 3
- * Borja Sotomayor, 2013
+ * Borja Sotomayor, 2014
  *
  * An abstract class for reading a single event from
  * a GitHub activity source.

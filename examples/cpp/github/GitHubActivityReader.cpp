@@ -1,6 +1,6 @@
 /*
  * CMSC 12300 - Computer Science with Applications 3
- * Borja Sotomayor, 2013
+ * Borja Sotomayor, 2014
  *
  * An abstract class for reading a single event from
  * a GitHub activity source.
@@ -42,13 +42,6 @@ GitHubActivityEvent* GitHubActivityReader::createEvent(string jsonstr)
 
     type = root.get("type", Json::Value::null).asString();
 
-    if (type == "PushEvent")
-    {
-        event = new GitHubPushEvent(root);
-    }
-
-    return event;
-/*
     if (type == "CommitCommentEvent")
     {
         event = new GitHubCommitCommentEvent(root);
@@ -79,7 +72,7 @@ GitHubActivityEvent* GitHubActivityReader::createEvent(string jsonstr)
     }
     else if (type == "ForkEvent")
     {
-        event = new GitHubCommitCommentEvent(root);
+        event = new GitHubForkEvent(root);
     }
     else if (type == "ForkApplyEvent")
     {
@@ -140,7 +133,7 @@ GitHubActivityEvent* GitHubActivityReader::createEvent(string jsonstr)
     else if (type == "WatchEvent")
     {
         event = new GitHubWatchEvent(root);
-    }*/
+    }
 
     return event;
 }
