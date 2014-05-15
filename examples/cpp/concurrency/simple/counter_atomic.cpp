@@ -10,6 +10,7 @@
 #include <thread>
 #include <iostream>
 #include <atomic>
+#include <vector>
 using namespace std;
 
 const unsigned int NTHREADS = 20;
@@ -31,20 +32,20 @@ void decrement()
 
 int main(int argc, char* argv[])
 {
-	cout << "The counter is " << counter << endl;
+    vector<thread> vt;
 
-	thread *threads = new thread[NTHREADS];
+	cout << "The counter is " << counter << endl;
 
 	for(unsigned int i=0; i<NTHREADS; i++)
 		if(i%2==0)
-			threads[i] = thread(increment);
+            vt.push_back(thread(increment));
 		else
-			threads[i] = thread(decrement);
+            vt.push_back(thread(decrement));
 
-	for(unsigned int i=0; i<NTHREADS; i++)
-		threads[i].join();
+    for(thread &t : vt)
+		t.join();
 
-	cout << "The counter is " << counter << endl;
+	cout << "The counter is " << counter << endl;;
 
 	return 0;
 }
